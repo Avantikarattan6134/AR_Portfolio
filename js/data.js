@@ -4,7 +4,7 @@ window.PORTFOLIO_DATA = {
     name: "Avantika Rattan",
     role: "M.S. Robotics · University of Michigan",
     blurb: "Robotics and machine-learning researcher working across the full autonomy stack (perception, SLAM, state estimation, equivariant deep learning, planning, and control), from model design through real-time deployment and field validation on physical robot platforms.",
-    seeking: "Seeking research & robotics/AV roles · Graduating Dec 2026",
+    seeking: "Seeking research & robotics/AV roles · Graduating May 2027",
     email: "arattan@umich.edu",
     phone: "734-255-6901",
     linkedin: "https://linkedin.com/in/avantika-rattan-a837231b9",
@@ -19,7 +19,7 @@ window.PORTFOLIO_DATA = {
     { value: "11", label: "Research & industry projects" }
   ],
   education: [
-    { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected Dec 2026", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
+    { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected May 2027", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
     { degree: "B.Tech, Mechatronics & Automation", school: "Vellore Institute of Technology", when: "Graduated May 2024", detail: "CGPA 9.32 / 10 · Ranked 3rd in a cohort of ~200 · Robot Kinematics & Dynamics, Control Engineering, Industrial Automation, Signal Processing" }
   ],
   experience: [
@@ -165,6 +165,7 @@ window.PORTFOLIO_DATA = {
       badge: "Honda Research Institute",
       summary: "An autonomous surface vessel that detects and localizes trailers on open water with no drift, fusing camera, LiDAR and IMU.",
       media: "ASV on-water footage + segmentation overlays + 3D map",
+      image: "assets/honda-research-institute.png",
       overview: "A production-quality maritime perception and localization system for the Nautilus autonomous surface vessel, built with Honda Research Institute. The system detects and localizes trailers and produces a drift-free, globally consistent 3D map and trajectory from fused camera, LiDAR and IMU data.",
       approach: [
         "Trained YOLO instance segmentation on 2880×2880 images from a 75,000+ image FL/Japan dataset, annotated with SAM2 assistance.",
@@ -268,21 +269,21 @@ window.PORTFOLIO_DATA = {
       id: "rl-control",
       title: "PPO & DQN: RL for Embodied Robot Control",
       category: "Reinforcement Learning",
-      year: "2025–2026",
-      badge: "",
+      year: "2026–Present",
+      badge: "In progress",
       summary: "PPO and DQN implemented from scratch for sequential decision-making and motion planning, with a study of imitation-learning failure modes.",
       media: "Training reward curves + policy rollout frames",
-      overview: "From-scratch implementations of PPO and DQN for embodied robot control and motion planning, alongside an analysis of when imitation-learning approaches break down.",
+      overview: "An in-progress project: from-scratch implementations of PPO and DQN for embodied robot control and motion planning, alongside an analysis of when imitation-learning approaches break down.",
       approach: [
         "PPO from scratch: clipped surrogate objective, GAE advantage estimation and reward design.",
         "DQN with experience replay and target networks for sequential decision-making.",
         "Studied diffusion policy and analyzed behavior-cloning failure modes: distribution shift and compounding errors."
       ],
       results: [
-        { value: "2", label: "Algorithms implemented from scratch" }
+        { value: "Active", label: "Currently in development: PPO and DQN implemented from scratch" }
       ],
       stack: ["PyTorch", "PPO", "DQN", "GAE"],
-      links: [{ label: "GitHub", href: "#" }]
+      links: []
     },
     {
       id: "ros2-nav",
