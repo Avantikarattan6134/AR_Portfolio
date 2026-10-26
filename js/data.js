@@ -50,9 +50,10 @@ window.PORTFOLIO_DATA = {
       when: "Jun 2026 to Aug 2026",
       note: "",
       points: [
-        "Built a multi-sensor perception & localization pipeline for an autonomous boat (camera, LiDAR, GNSS, IMU) for real-time positioning in unstructured outdoor environments.",
-        "Deployed an invasive-aquatic-plant detector feeding a semantic mapping system built on Convolutional Bayesian Kernel Inference (ConvBKI).",
-        "Integrated global aerial maps via the Google Maps API with the platform's local sensor-derived maps."
+        "Designed and wrote the ROS 2 autonomy stack for a WAM-V-style autonomous surface vessel: GPS/IMU localization, RealSense and LiDAR perception, ConvBKI neural occupancy mapping, A* and boustrophedon coverage planning, and Pure Pursuit thrust control.",
+        "Built a global prior map from Google satellite tiles and OpenStreetMap shoreline, dock and pier data, merged with the local sensor map so the boat can plan a full-lake survey with zero operator input.",
+        "Validated the full closed loop in the VRX/Gazebo marine simulator, then brought the stack up on the real boat: live pose tracking over satellite imagery, bench-tested ESC control and a first tethered autonomous run.",
+        "Set up the invasive-aquatic-plant detector: a 24-class dataset and DEIMv2 fine-tuning on a DINOv3 backbone, plus a YOLOv8 person detector wired to an emergency stop."
       ]
     },
     {
@@ -181,24 +182,35 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "lacuum",
-      title: "Lacuum AI: Multi-Sensor Perception & Localization for an Autonomous Boat",
-      category: "Industry · Perception + Localization",
+      title: "Lacuum AI: Autonomy Stack for an Invasive-Plant Cleanup Boat",
+      category: "Industry · Full Autonomy Stack",
       year: "Summer 2026",
       badge: "Robotics & Research Engineer Intern",
-      summary: "Built the camera, LiDAR, GNSS and IMU perception and localization pipeline for an autonomous boat operating in unstructured outdoor water, and deployed an invasive-aquatic-plant detector that feeds a ConvBKI semantic map.",
-      media: "Boat platform + semantic map + detector output",
-      overview: "Summer 2026 internship at Lacuum AI, a startup building autonomous boats for waterway maintenance. I owned the perception and localization stack: fusing camera, LiDAR, GNSS and IMU for real-time positioning in unstructured outdoor environments, deploying a detector for invasive aquatic plants, and feeding its detections into a semantic mapping system built on Convolutional Bayesian Kernel Inference (ConvBKI). I also integrated global aerial imagery from the Google Maps API with the platform's local sensor-derived maps.",
+      summary: "Built the ROS 2 autonomy stack for a WAM-V-style autonomous surface vessel that surveys lakes and finds invasive aquatic plants: GPS/IMU localization, depth and LiDAR perception, ConvBKI neural occupancy mapping, a satellite + OpenStreetMap prior map, A* and coverage planning, Pure Pursuit control, and a DINOv3-based plant detector.",
+      media: "Boat camera frame on the pond + ConvBKI map + segmentation",
+      image: "assets/lacuum-pond-frame.jpg",
+      gallery: [
+        { src: "assets/lacuum-water-segmentation.png", caption: "Perception debug on a recorded pond sequence: camera frame, water and obstacle masks, and the fused labelling (blue = water, red = obstacle)" },
+        { src: "assets/lacuum-convbki-map.png", caption: "ConvBKI occupancy map built from a recorded RealSense bag: blue = free water, red = obstacle, grey = unknown" }
+      ],
+      overview: "Summer 2026 internship at Lacuum AI, a startup building autonomous boats for waterway maintenance. I owned the autonomy software for a WAM-V-style ASV (dual thrusters, RealSense depth camera, Robosense LiDAR, VectorNav IMU, Septentrio GNSS) whose mission is to survey a lake with no human goal input, detect invasive aquatic plants, and plan cleanup. I designed and wrote the ROS 2 stack end to end, validated the full closed loop in the VRX/Gazebo marine simulator, then brought it up on the real boat: live GPS/IMU pose tracking over satellite imagery, bench-tested thruster control, and a first tethered Pure Pursuit run. I also built the training pipeline for a 24-class invasive-plant detector on a DEIMv2 detector with a DINOv3 backbone.",
       approach: [
-        "Designed a multi-sensor perception and localization pipeline (camera, LiDAR, GNSS, IMU) for real-time positioning of an autonomous surface vessel in unstructured outdoor water.",
-        "Deployed an invasive-aquatic-plant detector and connected its outputs to a ConvBKI semantic mapping system so detections accumulate into a probabilistic map.",
-        "Integrated global aerial maps from the Google Maps API with the boat's local sensor-derived maps."
+        "Localization: GPS + IMU to a local ENU pose with TF broadcasting (validated live on the boat while towed across a pond); integrated the DRIFT invariant-EKF package for future tighter fusion.",
+        "Perception: depth-geometry obstacle and water labelling from the RealSense (height and range gating that removes the hull and water-surface returns), a LiDAR obstacle processor, YOLOv8 person/boat/bird detection wired to an emergency-stop topic, and an HSV + depth algae detector that projects detections into the world frame via the GPS/IMU pose.",
+        "Local mapping: ConvBKI3D neural Bayesian-kernel occupancy mapping on CUDA, with a hull filter and merged local + global grids so shoreline beyond camera range is still treated as an obstacle.",
+        "Global prior map: fetches a Google Static Maps satellite tile and OpenStreetMap water, pier, dock and breakwater polygons at the boat's GPS fix, auto-sizes the map from the lake polygon, and rasterises water = free, land = occupied; an HSV detector over the satellite tile proposes algae cleanup targets.",
+        "Planning and mission logic: A* over the merged grid with waypoint simplification, a boustrophedon coverage planner that surveys the whole lake with zero operator input, and a hybrid goal manager with autonomous, manual (RViz click) and hybrid modes feeding a goal sequencer.",
+        "Control: Pure Pursuit to differential thrust with an immediate emergency-stop path; a click-to-path bridge for conservative first on-water tests; parameter tuning for VRX hydrodynamics and real ESCs.",
+        "Invasive-plant detector: consolidated Roboflow COCO exports into a 24-class dataset (20 invasive species such as hydrilla, water hyacinth and Eurasian watermilfoil, plus human, buoy, dock, fountain) and set up fine-tuning of DEIMv2-S with a DINOv3 backbone, including GPU benchmarking.",
+        "Engineering: Dockerised VRX/Gazebo Harmonic on an RTX 4090 lab PC, rosbag replay for offline regression, multi-machine ROS 2 (Humble on the boat, Jazzy on the laptop), rsync deployment to the boat's SSD, RViz satellite overlay, and a consolidated hand-off document so the next engineer can run the boat safely."
       ],
       results: [
-        { value: "4", label: "Sensor modalities fused: camera, LiDAR, GNSS, IMU" },
-        { value: "ConvBKI", label: "Semantic mapping of invasive aquatic plants" },
-        { value: "Global + local", label: "Aerial imagery fused with onboard maps" }
+        { value: "End-to-end", label: "Closed-loop autonomy validated in VRX simulation: perception, ConvBKI mapping, A*, coverage survey, Pure Pursuit" },
+        { value: "68", label: "Survey waypoints generated automatically from the satellite + OSM global map, dock area avoided" },
+        { value: "On water", label: "Live GPS/IMU pose tracking with satellite overlay and tethered thrust control validated on the real boat" },
+        { value: "24", label: "Detection classes in the invasive-plant dataset for the DEIMv2 / DINOv3 detector" }
       ],
-      stack: ["ROS2", "LiDAR", "GNSS", "IMU", "Object detection", "ConvBKI", "Google Maps API"],
+      stack: ["ROS 2 (Humble / Jazzy)", "Python", "PyTorch / CUDA", "ConvBKI", "DEIMv2 + DINOv3", "YOLOv8", "OpenCV", "Gazebo / VRX", "Docker", "Google Maps Static API", "OpenStreetMap", "RealSense", "Robosense LiDAR", "VectorNav IMU", "Septentrio GNSS", "A*", "Pure Pursuit"],
       links: []
     },
     {
