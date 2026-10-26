@@ -30,7 +30,7 @@ window.PORTFOLIO_DATA = {
       note: "Advisor: Prof. Maani Ghaffari",
       points: [
         "Shipped a drift-free autonomous maritime perception & localization system (Nautilus ASV, with Honda Research Institute), fusing camera, LiDAR & IMU to detect and localize trailers without drift.",
-        "Led GINIO, an SO(3)-equivariant neural inertial odometry study (ResNet vs LN-ResNet vs VN-ResNet), under review at CoRL 2026.",
+        "Co-authored GINIO, an SO(3)-equivariant interface for neural inertial odometry (accepted at CoRL 2026): designed and ran the physical IMU-remount validation on a Fetch robot, cutting unseen-remount ATE from 8.15 m to 0.50 m without retraining.",
         "Deployed a real-time ROS2 inference pipeline across Fetch, Husky and drone platforms with Jetson edge nodes and Tailscale networking.",
         "Stood up an off-road autonomy stack (Phoenix-R2, ARL Warthog) and debugged CycloneDDS domain issues."
       ]
@@ -85,34 +85,44 @@ window.PORTFOLIO_DATA = {
     { group: "Mathematics", items: ["Linear algebra", "Probability & statistics", "SE(3) / SO(3) / SE2(3) Lie theory", "Bayesian inference", "Numerical optimization", "Camera models"] }
   ],
   publications: [
-    { title: "GINIO: Geometric Interface for Neural Inertial Odometry", venue: "CoRL 2026", status: "Under review", authors: "Rattan, A. et al.", doi: "" },
+    { title: "GINIO: A Geometric SO(3)-Equivariant Interface for Neural Inertial Odometry", venue: "Conference on Robot Learning (CoRL) 2026", status: "Accepted", authors: "Kim, C., Zhu, M., Lin, T.-Y., Rattan, A., Ghaffari, M.", doi: "", url: "https://arxiv.org/abs/2609.25338" },
     { title: "Quantum Computing for Advanced Driver Assistance Systems and Autonomous Vehicles: A Review", venue: "IEEE Access, vol. 13, pp. 17554–17582, 2025", status: "First author", authors: "Rattan, A. et al.", doi: "10.1109/ACCESS.2025.3532958" },
     { title: "Monitoring the Condition of Nitrogen-Filled Tires Using Weightless Neural Networks", venue: "Automatika, 65(2):523–537, 2024", status: "", authors: "Rattan, A. et al.", doi: "10.1080/00051144.2024.2310979" }
   ],
   projects: [
     {
       id: "ginio",
-      title: "GINIO: Geometric Interface for Neural Inertial Odometry",
+      title: "GINIO: SO(3)-Equivariant Neural Inertial Odometry, Validated on a Physical IMU Remount",
       category: "Research · State Estimation",
       year: "2026",
-      badge: "Under review · CoRL 2026",
-      summary: "Standard neural inertial odometry silently breaks when the IMU is remounted. GINIO shows SO(3)-equivariant architectures don't.",
+      badge: "Accepted · CoRL 2026",
+      summary: "Neural inertial odometry silently breaks when the IMU is physically reinstalled in a new orientation. GINIO makes the learned measurement transform like the physics it represents. My contribution: the Fetch hardware study that shows this holds on a real robot without retraining.",
       media: "Fetch IMU-remount experiment rig + ATE trajectory plots",
-      image: "assets/fetch-robot.jpg",
-      overview: "Neural inertial odometry networks are trained at a fixed IMU orientation, but real deployments remount sensors. GINIO systematically compares standard ResNet against LN-ResNet and VN-ResNet equivariant variants for SO(3)-equivariant neural inertial odometry, quantifying how each degrades under physical IMU remounting.",
+      image: "assets/ginio-fetch-robot.jpg",
+      gallery: [
+        { src: "assets/ginio-teaser.png", caption: "Existing methods only tolerate rotation about gravity; GINIO imposes the SO(3) rotation law on the learned measurement itself" },
+        { src: "assets/ginio-fetch-trajectories.png", caption: "Fetch, unseen 90° remount: the non-equivariant ResNet diverges (12.5 m RMSE), GINIO tracks the odometry reference (0.04 m)" },
+        { src: "assets/ginio-fetch-resnet-remount.png", caption: "Full diagnostics for the ResNet baseline under the remount: trajectory, velocity and ATE" },
+        { src: "assets/ginio-fetch-ginio-remount.png", caption: "Same sequence with GINIO-R: velocity estimates stay aligned with the reference" },
+        { src: "assets/ginio-last-frame-alignment.png", caption: "Last-Frame Alignment: every sample in the IMU window is rotated into the final sensor frame, provably equivalent to world-frame training for equivariant predictors" },
+        { src: "assets/ginio-filter-trajectories.png", caption: "Filter-connected trajectories under a test-time SO(3) rotation of the IMU frame: GINIO stays near ground truth while gravity-aligned baselines drift" }
+      ],
+      overview: "GINIO (Kim, Zhu, Lin, Rattan, Ghaffari; CoRL 2026) is a geometric SO(3)-equivariant interface for neural inertial odometry: given a calibrated IMU window it predicts a motion measurement whose mean transforms as a vector and whose covariance transforms as a second-order tensor under any rotation of the IMU frame. It introduces Last-Frame Alignment for sensor-frame learning and a spectral covariance head, and plugs into filter-connected, AirIO-style and EqNIO-style pipelines. My role was the physical hardware validation: I designed and ran the Fetch IMU-remount study that tests whether the guarantee survives a real reinstall, where bias, misalignment, lever arm and timing all change alongside the rotation.",
       approach: [
-        "Designed controlled 0° / 90° / 180° IMU remount experiments on a physical Fetch robot with a BNO055 IMU.",
-        "Compared ResNet, LN-ResNet (Lie-Norm) and VN-ResNet (Vector-Neuron) backbones under identical training and evaluation.",
-        "Built a real-time ROS2 inference pipeline with multi-robot YAML config, deployed across Fetch, Husky and drone.",
-        "Generated all figures in matplotlib; added a professor-requested blue-formatted appendix."
+        "Mounted an Adafruit BNO055 inside the mobile base of a Fetch robot and used only its raw 6-axis accelerometer and gyroscope channels, with onboard wheel odometry as the reference trajectory.",
+        "Designed the protocol: train every model only on the nominal mounting, then physically reinstall the IMU in two unseen 90° orientations (Test Cases 1 and 2) and record 46 remount sequences plus 4 held-out nominal sequences.",
+        "Built the real-time ROS2 inference pipeline with multi-robot YAML configuration, deployed across Fetch, Husky and a drone with Jetson edge nodes.",
+        "Evaluated the non-equivariant ResNet against GINIO-R on identical recordings, plus an augmentation ablation showing full SO(3) rotation augmentation only partly rescues the baseline.",
+        "Produced the hardware figures and the full-diagnostic appendix plots (trajectory, velocity, ATE) for the paper."
       ],
       results: [
-        { value: "81×", label: "Worst-case ResNet degradation under remounting" },
-        { value: "16.5×", label: "Improvement from equivariant architecture" },
-        { value: "2.018 m", label: "Equivariant ATE vs 76.389 m baseline" }
+        { value: "8.15 m → 0.50 m", label: "Unseen physical-remount ATE, ResNet vs GINIO-R, no retraining" },
+        { value: "16.5×", label: "Remount robustness improvement on Fetch" },
+        { value: "2.018 m", label: "TLIO ID/SO(3) ATE for GINIO, vs 76.389 m for EqNIO, with 11.6× fewer FLOPs" },
+        { value: "> 1000×", label: "Reduction in covariance-equivariance error from the spectral head" }
       ],
-      stack: ["PyTorch", "ROS2", "Fetch", "BNO055 IMU", "SO(3) equivariance", "matplotlib"],
-      links: [{ label: "Paper (under review)", href: "#" }]
+      stack: ["PyTorch", "ROS2", "Fetch", "BNO055 IMU", "SO(3) equivariance", "Invariant filtering", "matplotlib"],
+      links: [{ label: "arXiv 2609.25338", href: "https://arxiv.org/abs/2609.25338" }]
     },
     {
       id: "nautilus",

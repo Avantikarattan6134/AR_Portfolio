@@ -146,7 +146,8 @@
     <h2 class="section-title">Peer-reviewed work.</h2>
     <div class="pub-list">
       ${d.publications.map(pub => {
-        const doiHref = pub.doi ? ("https://doi.org/" + pub.doi) : "";
+        const doiHref = pub.doi ? ("https://doi.org/" + pub.doi) : (pub.url || "");
+        const doiLabel = pub.doi ? "DOI" : "arXiv";
         return `
         <div class="glass-card pub-card">
           <div style="min-width:260px;flex:1">
@@ -154,7 +155,7 @@
             <div class="pub-meta">${escapeHtml(pub.authors)} · ${escapeHtml(pub.venue)}</div>
             ${pub.status ? `<span class="pub-status">${escapeHtml(pub.status)}</span>` : ""}
           </div>
-          ${doiHref ? `<a href="${escapeHtml(doiHref)}" target="_blank" rel="noopener" class="pub-doi">DOI ↗</a>` : ""}
+          ${doiHref ? `<a href="${escapeHtml(doiHref)}" target="_blank" rel="noopener" class="pub-doi">${doiLabel} ↗</a>` : ""}
         </div>
       `;
       }).join("")}
