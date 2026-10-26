@@ -125,6 +125,36 @@ window.PORTFOLIO_DATA = {
       links: [{ label: "arXiv 2609.25338", href: "https://arxiv.org/abs/2609.25338" }]
     },
     {
+      id: "tartanimu",
+      title: "TartanIMU Challenge: One Equivariant Inertial Model for Four Embodiments",
+      category: "Research · Learned Inertial Odometry",
+      year: "2026",
+      badge: "Solo entry · Team ENIO",
+      summary: "A single 5.38 M-parameter SO(3)-equivariant network that predicts body-frame velocity from raw IMU for cars, legged robots, handheld devices and drones with no platform label, scoring 0.2565 against the organisers' 0.538 baseline.",
+      media: "Inference pipeline diagram + per-platform results",
+      image: "assets/tartanimu-pipeline.png",
+      overview: "A solo entry to the TartanIMU multi-embodiment inertial odometry challenge. The task: predict the mean body-frame velocity of every 1 s window from a raw 6-axis, 200 Hz IMU stream, with one shared set of weights across wheeled, legged, handheld and aerial platforms and no platform label at test time. The backbone is a Lie-neuron-style vector-neuron ResNet, exactly SO(3)-equivariant by construction, paired with a bidirectional LSTM across windows, learned frame adapters, multi-band vibration descriptors and a deterministic turn-kinematics speed gate at inference. The biggest wins were not architectural: a window-offset sampling correction that multiplied the usable training set about 200-fold, a physics-derived speed correction confined to 9 of 89 test trajectories, and replacing a validation split that was statistically uncorrelated with the regime that decides the ranking.",
+      approach: [
+        "Backbone: four-stage SO(3)-equivariant vector-neuron ResNet (32/64/96/128 channels, dilated temporal convolutions 1–16) with cross-product Lie-bracket features, invariant scalar gates and invariant attention pooling to one token per 1 s window.",
+        "Deliberately non-equivariant additions where the physics demands them: five learned 3×3 frame adapters soft-mixed by invariant weights, a two-layer BiLSTM (hidden 256) across 64-window chunks, and vibration descriptors gated by the network's own aerial probability.",
+        "Window-offset sampling: the released index has 82k non-overlapping windows but labels exist at full rate, so jittering the grid yields roughly 16 M distinct training windows. The single largest gain, and the only change in forty experiments that helped all four platforms.",
+        "Physics-consistent augmentation: time rescaling with a′ = s²(a − c) + c, ω′ = sω, plus log-uniform vibration-amplitude randomisation; trained from scratch with AdamW, cosine decay, EMA weights, about 70 minutes on one RTX 5080.",
+        "Turn-kinematics speed gate: in a steady turn |v| ≈ √(|f|² − g²) / |ω|, so a per-trajectory median ratio between this estimate and the network's speed rescales fast flights by at most 1.3×, using only that trajectory's own IMU.",
+        "Evaluation discipline: showed validation score and held-out fast-flight error are uncorrelated (r = −0.13), built a leave-one-flight-out protocol that reproduces the test failure on labelled data, and ran about fifty controlled experiments including an 80,640-configuration post-processing sweep that could not beat the shipped setting."
+      ],
+      results: [
+        { value: "0.2565", label: "Official score vs the organisers' 0.538 baseline (lower is better)" },
+        { value: "0.213 m/s", label: "Macro average velocity error; 0.642 m ATE20 across 89 test trajectories" },
+        { value: "≈ 200×", label: "More usable training windows from the sampling correction" },
+        { value: "3,118×", label: "Real-time inference speed, 120 MiB GPU memory, one forward pass per chunk" }
+      ],
+      stack: ["PyTorch", "Lie Neurons", "Vector Neurons", "SO(3) equivariance", "BiLSTM", "IMU", "Kaggle"],
+      links: [
+        { label: "Model + code on Hugging Face", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet" },
+        { label: "Technical report (PDF)", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet/resolve/main/ENIO_TartanIMU_Report.pdf" }
+      ]
+    },
+    {
       id: "nautilus",
       title: "Nautilus ASV: Drift-Free Maritime Perception & Localization",
       category: "Research · Perception + SLAM",
