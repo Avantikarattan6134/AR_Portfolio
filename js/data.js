@@ -208,6 +208,10 @@ window.PORTFOLIO_DATA = {
       badge: "Deployed on hardware",
       summary: "LiDAR SLAM, AMCL localization, Nav2 planning and closed-loop trajectory execution running on real TurtleBot hardware.",
       media: "TurtleBot navigating a mapped environment + RViz view",
+      image: "assets/mbot-robot.jpg",
+      gallery: [
+        { src: "assets/mbot-slam-map.png", caption: "Occupancy-grid SLAM map with planned and executed trajectories" }
+      ],
       overview: "A complete autonomy stack deployed end-to-end on TurtleBot hardware (mapping, localization, planning and closed-loop control), with real hardware failure debugging across every layer.",
       approach: [
         "LiDAR SLAM mapping and AMCL localization with Nav2 planning.",
@@ -229,6 +233,11 @@ window.PORTFOLIO_DATA = {
       badge: "",
       summary: "Modeled arms and workcells in URDF/XACRO and implemented teach-and-repeat motion with AprilTag camera calibration.",
       media: "RViz robot model + AprilTag calibration board",
+      image: "assets/armlab-block-detection.jpg",
+      video: "https://youtu.be/O1v-3R6_cI0",
+      gallery: [
+        { src: "assets/armlab-rx200-frames.png", caption: "RX200 5-DoF arm with Denavit–Hartenberg coordinate frames" }
+      ],
       overview: "Coursework building a manipulation stack: kinematic modeling of robot arms and workcell components, teach-and-repeat motion, and vision-based calibration.",
       approach: [
         "Modeled robot arms and workcell components with URDF/XACRO, TF frames and RViz workflows.",
