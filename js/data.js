@@ -202,52 +202,70 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "ros2-nav",
-      title: "Full-Stack ROS2 Autonomous Navigation (Hardware Deployed)",
+      title: "MBot Warehouse Robot: SLAM, Planning & Autonomous Exploration",
       category: "SLAM · Planning · Control",
-      year: "2025–2026",
-      badge: "Deployed on hardware",
-      summary: "LiDAR SLAM, AMCL localization, Nav2 planning and closed-loop trajectory execution running on real TurtleBot hardware.",
-      media: "TurtleBot navigating a mapped environment + RViz view",
+      year: "2025",
+      badge: "1st place · ROB 550 BotLab",
+      summary: "A from-scratch autonomy stack on a differential-drive MBot: PID wheel control, occupancy-grid SLAM with Monte Carlo localization, A* planning, frontier exploration and a custom forklift. Placed first overall in the ROB 550 competition.",
+      media: "MBot with forklift + SLAM map",
       image: "assets/mbot-robot.jpg",
       gallery: [
-        { src: "assets/mbot-slam-map.png", caption: "Occupancy-grid SLAM map with planned and executed trajectories" }
+        { src: "assets/mbot-slam-map.png", caption: "Estimated paths: Monte Carlo localization (blue) vs odometry (yellow) vs ground truth (green)" },
+        { src: "assets/mbot-slam-occupancy.png", caption: "Occupancy grid of the test maze produced by the full online SLAM system" },
+        { src: "assets/mbot-pid-step.png", caption: "Wheel velocity tracking for feedforward, PID and FF+PID on a 0.5 m/s step command" },
+        { src: "assets/mbot-forklift.png", caption: "Two-stage forklift: fixed frame, moving frame, 3D-printed couplers and servo winch" }
       ],
-      overview: "A complete autonomy stack deployed end-to-end on TurtleBot hardware (mapping, localization, planning and closed-loop control), with real hardware failure debugging across every layer.",
+      overview: "End-to-end design and implementation of an autonomous mobile warehouse robot on the Michigan Robotics MBot (wheel encoders, planar LiDAR, Raspberry Pi 5, ROS2). Every layer was written from scratch: calibrated feedforward + PID wheel control, a rotate–translate–rotate motion controller, log-odds occupancy-grid mapping, particle-filter Monte Carlo localization, online SLAM, an obstacle-aware A* planner, frontier-based exploration, and a two-stage forklift mechanism for moving and stacking crates. Team of three with Noah Mollerstuen and Ryan Tsai.",
       approach: [
-        "LiDAR SLAM mapping and AMCL localization with Nav2 planning.",
-        "Tuned A* and RRT* global planners.",
-        "Implemented and tuned PID and NMPC controllers for closed-loop trajectory execution.",
-        "Debugged real hardware failures across sensor, planning and control layers."
+        "Motion control: calibrated each wheel's PWM-to-speed model, then compared feedforward, PID and FF+PID modes on a 0.5 m/s step; low-pass filtered encoder velocities and bounded velocity and acceleration for smooth rotate–translate–rotate waypoint following.",
+        "Mapping: log-odds 2D occupancy grid updated online from LiDAR with Bresenham ray tracing, interpolating an SE(2) pose per ray to correct for robot motion during each scan.",
+        "Localization: Monte Carlo localization with an odometry action model (rotational and translational noise parameters) and a ray-cast sensor model mixing a Gaussian hit term with a uniform term over a precomputed obstacle-distance grid.",
+        "SLAM: closed the loop by localizing against the evolving map and then updating the map from the estimated pose on every scan, replacing drifting odometry-only maps with clean, continuous walls.",
+        "Planning: A* over the occupancy grid with a BFS obstacle-distance field that inflates cost near walls, a clearance-aware heuristic, and waypoint pruning before handoff to the controller.",
+        "Exploration: frontier detection by flood-fill clustering, a cost that trades travel distance against frontier size, and blacklisting of frontiers that repeatedly fail to plan.",
+        "Forklift: designed a two-stage OpenBeam elevator driven by an XL-320 servo winch with 3D-printed couplers, spool and pulley cap, commanded from a ROS2 node on the Pi."
       ],
       results: [
-        { value: "4", label: "Layers integrated: sensing → SLAM → planning → control" }
+        { value: "1st", label: "Overall in the ROB 550 BotLab competition, top score in every event" },
+        { value: "< 5 cm / 15°", label: "Return-to-start error after fully autonomous exploration of an unknown maze" },
+        { value: "58 s", label: "Maze navigation run time (Event 1)" },
+        { value: "62 ms", label: "Particle-filter update with 1000 particles, real-time at 10 Hz" }
       ],
-      stack: ["ROS2", "Nav2", "AMCL", "SLAM Toolbox", "TurtleBot", "NMPC", "PID"],
-      links: [{ label: "GitHub", href: "#" }]
+      stack: ["ROS2", "MBot", "Monte Carlo localization", "Occupancy-grid SLAM", "A*", "Frontier exploration", "PID", "2D LiDAR", "XL-320 servo"],
+      links: []
     },
     {
       id: "ros2-manip",
-      title: "ROS2 Manipulation, URDF/XACRO & Arm Calibration",
-      category: "Manipulation",
-      year: "2025–2026",
-      badge: "",
-      summary: "Modeled arms and workcells in URDF/XACRO and implemented teach-and-repeat motion with AprilTag camera calibration.",
-      media: "RViz robot model + AprilTag calibration board",
+      title: "RX200 Arm: Vision-Guided Pick-and-Place with Calibrated DH Kinematics",
+      category: "Manipulation · Perception",
+      year: "2025",
+      badge: "ROB 550 ArmLab",
+      summary: "Camera calibration, depth-based block detection, closed-form forward and inverse kinematics, and teach-and-repeat on a 5-DoF Interbotix RX200, sorting and stacking colored blocks autonomously.",
+      media: "Block detection overlay + RX200 DH frames",
       image: "assets/armlab-block-detection.jpg",
       video: "https://youtu.be/O1v-3R6_cI0",
       gallery: [
-        { src: "assets/armlab-rx200-frames.png", caption: "RX200 5-DoF arm with Denavit–Hartenberg coordinate frames" }
+        { src: "assets/armlab-rx200-frames.png", caption: "RX200 5-DoF arm with Denavit–Hartenberg coordinate frames assigned at each joint" },
+        { src: "assets/armlab-calibration-grid.jpg", caption: "Calibration check: world grid points projected back onto the image (MSE 6.36 px, about 5 mm)" },
+        { src: "assets/armlab-detection-heatmap.png", caption: "Colors correctly identified per 100 mm workspace cell, 87.9% overall" },
+        { src: "assets/armlab-teach-repeat.png", caption: "End-effector trajectory over 10 teach-and-repeat cycles" }
       ],
-      overview: "Coursework building a manipulation stack: kinematic modeling of robot arms and workcell components, teach-and-repeat motion, and vision-based calibration.",
+      overview: "A complete pick-and-place system on the Interbotix RX200 5-DoF arm with an Intel RealSense L515 RGB-D camera. The pipeline chains camera calibration (intrinsics, PnP extrinsics, homography), vectorized depth-contour block detection, a Denavit–Hartenberg forward-kinematics model with calibrated joint offsets, an analytical inverse-kinematics solver, and a click-to-grab GUI. The system sorted and stacked blocks by color and size across three competition events. Team of three with Tzu-Chieh Tai and Venkatakrishnan Amruthur Kesavan.",
       approach: [
-        "Modeled robot arms and workcell components with URDF/XACRO, TF frames and RViz workflows.",
-        "Implemented teach-and-repeat arm motion and joint waypoint handling.",
-        "AprilTag-based camera calibration, PnP pose estimation and homography-based board alignment."
+        "Calibration: intrinsics from a checkerboard with the ROS camera_calibration package (5-trial average, within 7.6% of factory values); extrinsics from AprilTag centers with cv2.solvePnP (rotation within 2° of hand measurement); a homography from four AprilTags gives a rectified top-down workspace view.",
+        "Block detection: vectorized depth map, cv2.findContours on block top surfaces, cv2.minAreaRect for centroid, size and yaw; area gating rejects distractors; color by nearest-RGB match against a palette recalibrated before each run.",
+        "Forward kinematics: derived the full DH table for the RX200, then tuned joint-angle offsets on joints 1 and 3 after finding that gravity sag shifts the real home pose; verified end-effector position to within the 8 mm manufacturer spec.",
+        "Inverse kinematics: closed-form geometric solution in the r–z plane via the law of cosines, with elbow-up and elbow-down branches and explicit reachability tests; wrist pitch scheduled from π/2 near the base to 0 at the workspace edge to extend reach.",
+        "Click-to-grab and place: inverse homography, then depth plus intrinsics, then extrinsics to recover world coordinates; three-waypoint approach, grasp and retreat motions with a ground-clearance term and a normalization press for consistent stacking.",
+        "Teach-and-repeat: torque-off teaching through the GUI and 10-cycle replay, showing near-identical end-effector trajectories with only minor servo backlash near sharp turns."
       ],
       results: [
-        { value: "URDF", label: "Kinematic modeling + TF workflow" }
+        { value: "87.9%", label: "Block color identification success across the workspace" },
+        { value: "≈ 5 mm", label: "Calibration reprojection error (6.36 px MSE)" },
+        { value: "≤ 8 mm", label: "Forward-kinematics position error vs ruler-measured ground truth" },
+        { value: "5 blocks", label: "Stacked in rainbow order in under 180 s (Event 1)" }
       ],
-      stack: ["ROS2", "URDF/XACRO", "TF2", "RViz", "AprilTag", "PnP"],
+      stack: ["Interbotix RX200", "RealSense L515", "OpenCV", "AprilTag", "PnP", "Homography", "Denavit–Hartenberg", "Analytical IK", "ROS", "Python"],
       links: []
     },
     {
