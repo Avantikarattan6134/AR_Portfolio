@@ -53,7 +53,7 @@ window.PORTFOLIO_DATA = {
         "Designed and wrote the ROS 2 autonomy stack for a WAM-V-style autonomous surface vessel: GPS/IMU localization, RealSense and LiDAR perception, ConvBKI neural occupancy mapping, A* and boustrophedon coverage planning, and Pure Pursuit thrust control.",
         "Built a global prior map from Google satellite tiles and OpenStreetMap shoreline, dock and pier data, merged with the local sensor map so the boat can plan a full-lake survey with zero operator input.",
         "Validated the full closed loop in the VRX/Gazebo marine simulator, then brought the stack up on the real boat: live pose tracking over satellite imagery, bench-tested ESC control and a first tethered autonomous run.",
-        "Set up the invasive-aquatic-plant detector: a 24-class dataset and DEIMv2 fine-tuning on a DINOv3 backbone, plus a YOLOv8 person detector wired to an emergency stop."
+        "Built the invasive-aquatic-plant perception pipeline end to end: a 24-class dataset and DEIMv2 fine-tuning on a DINOv3 backbone (complete, field testing pending), plus a YOLOv8 person detector wired to an emergency stop."
       ]
     },
     {
@@ -201,14 +201,14 @@ window.PORTFOLIO_DATA = {
         "Global prior map: fetches a Google Static Maps satellite tile and OpenStreetMap water, pier, dock and breakwater polygons at the boat's GPS fix, auto-sizes the map from the lake polygon, and rasterises water = free, land = occupied; an HSV detector over the satellite tile proposes algae cleanup targets.",
         "Planning and mission logic: A* over the merged grid with waypoint simplification, a boustrophedon coverage planner that surveys the whole lake with zero operator input, and a hybrid goal manager with autonomous, manual (RViz click) and hybrid modes feeding a goal sequencer.",
         "Control: Pure Pursuit to differential thrust with an immediate emergency-stop path; a click-to-path bridge for conservative first on-water tests; parameter tuning for VRX hydrodynamics and real ESCs.",
-        "Invasive-plant detector: consolidated Roboflow COCO exports into a 24-class dataset (20 invasive species such as hydrilla, water hyacinth and Eurasian watermilfoil, plus human, buoy, dock, fountain) and set up fine-tuning of DEIMv2-S with a DINOv3 backbone, including GPU benchmarking.",
+        "Invasive-plant detector: built the complete DINOv3 perception pipeline, consolidating Roboflow COCO exports into a 24-class dataset (20 invasive species such as hydrilla, water hyacinth and Eurasian watermilfoil, plus human, buoy, dock, fountain) and fine-tuning DEIMv2-S on a DINOv3 backbone with GPU benchmarking; field testing on the boat is the remaining step.",
         "Engineering: Dockerised VRX/Gazebo Harmonic on an RTX 4090 lab PC, rosbag replay for offline regression, multi-machine ROS 2 (Humble on the boat, Jazzy on the laptop), rsync deployment to the boat's SSD, RViz satellite overlay, and a consolidated hand-off document so the next engineer can run the boat safely."
       ],
       results: [
         { value: "End-to-end", label: "Closed-loop autonomy validated in VRX simulation: perception, ConvBKI mapping, A*, coverage survey, Pure Pursuit" },
         { value: "68", label: "Survey waypoints generated automatically from the satellite + OSM global map, dock area avoided" },
         { value: "On water", label: "Live GPS/IMU pose tracking with satellite overlay and tethered thrust control validated on the real boat" },
-        { value: "24", label: "Detection classes in the invasive-plant dataset for the DEIMv2 / DINOv3 detector" }
+        { value: "24", label: "Detection classes in the completed DEIMv2 / DINOv3 invasive-plant pipeline, awaiting field testing" }
       ],
       stack: ["ROS 2 (Humble / Jazzy)", "Python", "PyTorch / CUDA", "ConvBKI", "DEIMv2 + DINOv3", "YOLOv8", "OpenCV", "Gazebo / VRX", "Docker", "Google Maps Static API", "OpenStreetMap", "RealSense", "Robosense LiDAR", "VectorNav IMU", "Septentrio GNSS", "A*", "Pure Pursuit"],
       links: []
