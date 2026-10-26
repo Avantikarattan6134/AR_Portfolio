@@ -139,26 +139,34 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "impact-aware",
-      title: "Impact-Aware State Estimation: RI-EKF + LSTM on SE2(3)",
+      title: "Impact-Aware State Estimation for Off-Road Motion: InEKF on SE₂(3)",
       category: "State Estimation",
-      year: "2025–2026",
-      badge: "with Pranav Jain",
-      summary: "Diagnosed a catastrophic off-road estimation failure, then fixed it with a learned adaptive process-noise model, a 96% error reduction.",
+      year: "2026",
+      badge: "ROB 530 · with Pranav Jain",
+      summary: "Diagnosed why a GPS/IMU invariant EKF oscillates catastrophically on off-road hills (the non-holonomic constraint fights GPS corrections), then fixed it with jerk-triggered and LSTM-learned adaptive noise and constraint relaxation: a 96% ATE reduction.",
       media: "ROOAD trajectory overlays + ATE/RPE evaluation plots",
-      overview: "A Right-Invariant EKF on SE2(3), in C++, fusing RTK GPS (10 Hz), IMU (400 Hz) and monocular visual odometry on the public ROOAD off-road UGV dataset. On dynamic terrain the filter suffered a catastrophic failure (6.326 m ATE); an LSTM-based adaptive process-noise scaling model closed the gap.",
+      image: "assets/impact-trajectory-rt5.png",
+      gallery: [
+        { src: "assets/impact-rpe-ate-bars.png", caption: "RPE and ATE across all six ROOAD sequences: baseline InEKF vs jerk-adaptive vs LSTM-adaptive" },
+        { src: "assets/impact-signals-rt5.png", caption: "IMU jerk, predicted process-noise scale α, and trajectory error over time on the held-out rt5_updown sequence" },
+        { src: "assets/impact-ate-over-time.png", caption: "ATE over time: the baseline filter oscillates on hills while both adaptive filters stay flat" }
+      ],
+      overview: "A Right-Invariant EKF on SE₂(3) fusing a 400 Hz VectorNav IMU, 10 Hz RTK GPS and a 30 Hz monocular camera on the public ROOAD off-road dataset (Clearpath Warthog, Texas A&M RELLIS campus). The baseline filter's hard non-holonomic constraint (zero lateral and vertical velocity) conflicts with GPS corrections during hill traversal: every fix pushes the estimate up the slope and the constraint zeros it 25 ms later, producing a 6.3 m mean ATE. Two adaptive mechanisms learn when to relax the constraint and inflate process noise: a jerk-threshold heuristic and a two-layer LSTM that predicts a process-noise scale α and a relaxation factor β from 50-sample IMU windows. Both cut ATE by 96%; the LSTM achieves the best RPE on five of six sequences.",
       approach: [
-        "Built a Right-Invariant EKF on SE2(3) in C++ with RTK GPS, IMU and monocular VO measurement models.",
-        "Implemented monocular VO from scratch: FAST features, Lucas-Kanade optical flow, bidirectional consistency, RANSAC Essential-matrix estimation and rotation recovery.",
-        "Designed an LSTM adaptive process-noise scaling module to handle dynamic-terrain impacts.",
-        "Built a full ATE / RPE / segment-error evaluation pipeline across six independent sequences."
+        "Implemented the InEKF on SE₂(3) with state-independent error dynamics, IMU propagation, RTK-GPS position updates, a non-holonomic-constraint pseudo-measurement, and a visual-odometry rotation update.",
+        "Monocular VO from scratch: FAST corners, Lucas–Kanade optical flow with a bidirectional consistency check, RANSAC essential-matrix estimation and pose recovery, with quality gates on inlier count, rotation magnitude and jerk.",
+        "InEKF+Jerk: detect impacts when IMU jerk exceeds 8 m/s³, spike the process-noise scale up to 15× and constraint relaxation up to 0.85, then decay geometrically.",
+        "InEKF+LSTM: a two-layer, 128-unit LSTM over [a, ω, jerk, |a|, |ω|] windows with sigmoid heads for α ∈ [0.1, 20] and β ∈ [0, 0.85]; labels generated analytically in O(N) from jerk percentiles so no filter re-runs are needed; trained on four sequences and tested on two held-out ones.",
+        "Full evaluation suite: ATE, RPE, segment-level ATE on high-dynamic impact regions, and velocity-space metrics (speed RMSE, heading error), with Umeyama alignment."
       ],
       results: [
-        { value: "96%", label: "ATE error reduction from LSTM fix" },
-        { value: "0.258 m", label: "Final ATE (from 6.326 m)" },
-        { value: "6", label: "Independent evaluation sequences" }
+        { value: "96%", label: "Mean ATE reduction vs the InEKF baseline" },
+        { value: "0.258 m", label: "Mean ATE with the jerk-adaptive filter (0.277 m with LSTM), down from 6.326 m" },
+        { value: "5 / 6", label: "Sequences where the LSTM filter achieves the best RPE" },
+        { value: "19%", label: "Further ATE gain from monocular VO on rt5_updown" }
       ],
-      stack: ["C++", "RI-EKF", "SE2(3)", "LSTM", "RTK GPS", "Monocular VO"],
-      links: [{ label: "GitHub", href: "#" }]
+      stack: ["Python", "InEKF", "SE₂(3)", "PyTorch LSTM", "OpenCV", "RTK GPS", "VectorNav IMU", "Monocular VO", "ROOAD"],
+      links: [{ label: "GitHub", href: "https://github.com/Avantikarattan6134/Impact-Aware-S.E.-for-Off-Road-Motion" }]
     },
     {
       id: "vio-vit",
@@ -270,23 +278,36 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "bevunet",
-      title: "BEVUNet: Multi-Camera 3D Perception",
-      category: "Perception",
+      title: "BEVUNet: Camera-Only BEV Occupancy Under Adverse Weather",
+      category: "Perception · Autonomous Driving",
       year: "2025–2026",
-      badge: "",
-      summary: "A surround-camera bird's-eye-view encoder–decoder for occupancy prediction and semantic scene understanding.",
-      media: "Multi-camera BEV occupancy grid visualization",
-      overview: "A surround-camera bird's-eye-view perception model in PyTorch with multi-camera extrinsic calibration, benchmarked for robustness to calibration and synchronization error.",
+      badge: "ROB 535 · CARLA",
+      summary: "A lightweight six-camera bird's-eye-view occupancy network trained with weak supervision in CARLA, with weather-adaptive thresholds that keep recall above 0.95 in clear, rainy and foggy scenes.",
+      media: "CARLA weather grid + BEV occupancy predictions",
+      image: "assets/bevunet-weather-grid.jpg",
+      gallery: [
+        { src: "assets/bevunet-pipeline.jpg", caption: "Pipeline: YOLOv8 pseudo-labels per view, multi-view fusion, BEVUNet training, weather-adaptive thresholding" },
+        { src: "assets/bevunet-bev-clear.jpg", caption: "Clear: front camera, pseudo ground-truth BEV, predicted probability map, binary prediction (τ = 0.55)" },
+        { src: "assets/bevunet-bev-rainy.jpg", caption: "Rainy: same layout, binarized at τ = 0.45" },
+        { src: "assets/bevunet-bev-foggy.jpg", caption: "Foggy: same layout, binarized at τ = 0.40" },
+        { src: "assets/bevunet-loss-curve.jpg", caption: "Training and validation loss over 10 epochs" }
+      ],
+      overview: "Camera-only BEV occupancy estimation from six synchronized RGB cameras in a synthetic CARLA dataset covering clear, rainy and foggy weather. To avoid manual BEV annotation, YOLOv8 detections in each view are projected into a 128×128 BEV grid (60 m × 60 m) with a heuristic perspective mapping and fused across cameras as pseudo-labels. A U-Net–style encoder–decoder (BEVUNet) with shared-weight per-camera encoders and multi-view feature fusion is trained end-to-end with BCE loss, and weather-specific confidence thresholds at inference trade precision against recall as visibility degrades. Team of three with Pranav Jain and Venkatakrishnan Amruthur Kesavan.",
       approach: [
-        "Built a surround-camera BEV encoder–decoder in PyTorch.",
-        "Handled multi-camera extrinsic calibration for occupancy prediction and semantic understanding.",
-        "Benchmarked sensitivity to calibration errors and synchronization offsets."
+        "Built a six-camera 360° CARLA dataset in clear, rainy and foggy conditions, resized to 128×128 per view and split 4:1 per scene to avoid temporal leakage.",
+        "Generated BEV pseudo-labels by running pretrained YOLOv8 per view with weather-specific confidence thresholds, mapping box centers to BEV cells with perspective priors, and taking the union across views.",
+        "Designed BEVUNet: 18-channel stacked multi-view input, a 3-stage encoder (32→64→128 channels), a transposed-convolution decoder with skip connections and a 1×1 logits head; trained with Adam at 1e-4 and BCE-with-logits, keeping the best validation checkpoint over 10 epochs.",
+        "Weather-adaptive inference thresholds (0.55 clear, 0.45 rainy, 0.40 foggy) suppress false positives in clean scenes while preserving recall in degraded ones.",
+        "Evaluated mIoU, precision, recall and mAP per weather condition and benchmarked against PETR, PETRv2, BEVFormer, BEVDet and DA-BEV."
       ],
       results: [
-        { value: "BEV", label: "Multi-camera occupancy prediction" }
+        { value: "0.846", label: "BEV mAP in clear weather (0.706 rainy, 0.727 foggy)" },
+        { value: "> 0.95", label: "Recall maintained across all three weather conditions" },
+        { value: "0.341", label: "mIoU in clear weather, vs 0.356 for DA-BEV" },
+        { value: "6 cams", label: "Camera-only: no LiDAR, no depth supervision" }
       ],
-      stack: ["PyTorch", "BEV", "U-Net", "Multi-camera calibration"],
-      links: []
+      stack: ["PyTorch", "CARLA", "YOLOv8", "U-Net", "BEV perception", "Weak supervision"],
+      links: [{ label: "GitHub", href: "https://github.com/Avantikarattan6134/CARLA-PerceptionLab" }]
     },
     {
       id: "3d-perception",
@@ -306,27 +327,6 @@ window.PORTFOLIO_DATA = {
         { value: "3", label: "Representations: points, NeRF, 3DGS" }
       ],
       stack: ["PointNet", "NeRF", "3D Gaussian Splatting", "PCL"],
-      links: []
-    },
-    {
-      id: "carla-sim2real",
-      title: "Sim2Real Pipeline: CARLA Domain Randomization",
-      category: "Perception · Simulation",
-      year: "2025–2026",
-      badge: "",
-      summary: "Automated clear/rain/fog/night domain randomization in CARLA, quantifying sim-to-real perception gaps.",
-      media: "CARLA weather conditions grid + mIoU degradation chart",
-      overview: "An automated domain-randomization and evaluation pipeline in CARLA that stress-tests perception across weather conditions and quantifies the sim-to-real gap.",
-      approach: [
-        "Built automated multi-condition (clear, rain, fog, night) domain randomization.",
-        "Ran condition-stratified evaluation pipelines.",
-        "Quantified sim2real perception gaps and mIoU degradation by condition."
-      ],
-      results: [
-        { value: "0.757", label: "Perception mAP" },
-        { value: "4", label: "Weather conditions stratified" }
-      ],
-      stack: ["CARLA", "Domain randomization", "mAP / mIoU"],
       links: []
     },
     {
@@ -350,24 +350,34 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "diff-pf",
-      title: "ROB599 Differentiable Particle Filter",
+      title: "Observation Models for Differentiable Particle Filters",
       category: "State Estimation · Learning",
       year: "2025–2026",
-      badge: "IEEE report",
-      summary: "Benchmarked five observation-model architectures for differentiable particle filtering across three maze tasks.",
+      badge: "ROB 599",
+      summary: "Benchmarked six observation-model encoders (CNN, ViT, ResNet, ResNet+LSTM, Swin, InEKF+ResNet) inside a differentiable particle filter across three maze-localization tasks on the Great Lakes HPC cluster.",
       media: "Maze navigation tasks + architecture comparison table",
-      overview: "A study comparing observation-model architectures for a differentiable particle filter on three maze-navigation tasks, run on the Great Lakes HPC cluster.",
+      image: "assets/diffpf-rmse-comparison.png",
+      gallery: [
+        { src: "assets/diffpf-difficulty-scaling.png", caption: "RMSE vs task difficulty: ResNet degrades most gracefully, InEKF+ResNet fails on multimodal mazes" },
+        { src: "assets/diffpf-particle-vs-kalman.png", caption: "Particle filter vs Kalman filter with the same learned encoder" },
+        { src: "assets/diffpf-resnet-nav01.png", caption: "ResNet-DPF on nav01: trajectory estimates and localization error over time" },
+        { src: "assets/diffpf-comparison-nav03.png", caption: "All five DPF encoders on the hardest maze (nav03)" }
+      ],
+      overview: "A systematic comparison of observation-model architectures within the Differentiable Particle Filter (DPF) framework of Jonschkowski et al. for robot localization from 24×24 RGB observations in maze environments of increasing difficulty (nav01 to nav03). Five DPF encoders are compared against an Invariant EKF on SE(2) that uses the same ResNet encoder, isolating the effect of the encoder from the effect of the filter. Team of three with Karthik Vairavan and Saumit Vedula.",
       approach: [
-        "Compared CNN, ViT, ResNet, ResNet+LSTM and InEKF+ResNet observation models.",
-        "Ran three maze-navigation tasks using TensorFlow 1.15 on Great Lakes HPC.",
-        "Produced a full IEEE LaTeX report."
+        "Implemented ViT (4 blocks, 4×4 patches), ResNet-18-style (3 residual stages), ResNet + 2-layer LSTM, and 2-stage Swin Transformer encoders as drop-in observation models for the TensorFlow 1.15 / Sonnet DPF codebase.",
+        "Built an InEKF+ResNet baseline on the SE(2) Lie group to test whether a Gaussian filter can match particle filtering with the same learned encoder.",
+        "Trained every model on 1000 episodes × 99 timesteps per task on NVIDIA V100 and RTX PRO 6000 nodes of Great Lakes HPC, then evaluated RMSE and ATE in pixels on nav01, nav02 and nav03.",
+        "Analyzed why global attention underperforms at 24×24 resolution and why LSTM temporal context is redundant given the particle propagation step; wrote up the study as an IEEE-format report."
       ],
       results: [
-        { value: "ResNet", label: "Won all three tasks" },
-        { value: "4–5×", label: "InEKF+ResNet underperformance (multimodal posterior)" }
+        { value: "ResNet", label: "Best on all three tasks: 67.5 / 104.3 / 184.4 px RMSE" },
+        { value: "Up to 26%", label: "RMSE reduction vs the CNN baseline" },
+        { value: "4–5×", label: "Higher error for InEKF+ResNet than particle filters: a Gaussian posterior fails on multimodal mazes" },
+        { value: "6 × 3", label: "Architectures × tasks compared" }
       ],
-      stack: ["TensorFlow 1.15", "Differentiable PF", "HPC / Slurm"],
-      links: []
+      stack: ["TensorFlow 1.15", "Sonnet", "Differentiable PF", "InEKF", "ViT", "ResNet", "Swin", "HPC / Slurm"],
+      links: [{ label: "GitHub", href: "https://github.com/Avantikarattan6134/Comparing-Observation-Models-for-Differentiable-Particle-Filters-in-Robot-Localization" }]
     },
     {
       id: "mgo-rrt",
