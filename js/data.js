@@ -188,11 +188,11 @@ window.PORTFOLIO_DATA = {
       year: "Summer 2026",
       badge: "Robotics & Research Engineer Intern",
       summary: "Built the ROS 2 autonomy stack for a WAM-V-style autonomous surface vessel that surveys lakes and finds invasive aquatic plants: GPS/IMU localization, depth and LiDAR perception, ConvBKI neural occupancy mapping, a satellite + OpenStreetMap prior map, A* and coverage planning, Pure Pursuit control, and a DINOv3-based plant detector.",
-      media: "Boat camera frame on the pond + ConvBKI map + segmentation",
-      image: "assets/lacuum-pond-frame.jpg",
+      media: "Lake satellite overlay in RViz + ConvBKI map",
+      image: "assets/lacuum-lake-satellite.jpg",
       gallery: [
-        { src: "assets/lacuum-water-segmentation.png", caption: "Perception debug on a recorded pond sequence: camera frame, water and obstacle masks, and the fused labelling (blue = water, red = obstacle)" },
-        { src: "assets/lacuum-convbki-map.png", caption: "ConvBKI occupancy map built from a recorded RealSense bag: blue = free water, red = obstacle, grey = unknown" }
+        { src: "assets/lacuum-rviz-satellite.jpg", caption: "RViz on the laptop: satellite imagery of the lake fetched at the boat's GPS fix, with the localization and planned-path displays" },
+        { src: "assets/lacuum-convbki-map.png", caption: "ConvBKI occupancy map from a recorded RealSense test sequence: blue = free water, red = obstacle, grey = unknown" }
       ],
       overview: "Summer 2026 internship at Lacuum AI, a startup building autonomous boats for waterway maintenance. I owned the autonomy software for a WAM-V-style ASV (dual thrusters, RealSense depth camera, Robosense LiDAR, VectorNav IMU, Septentrio GNSS) whose mission is to survey a lake with no human goal input, detect invasive aquatic plants, and plan cleanup. I designed and wrote the ROS 2 stack end to end, validated the full closed loop in the VRX/Gazebo marine simulator, then brought it up on the real boat: live GPS/IMU pose tracking over satellite imagery, bench-tested thruster control, and a first tethered Pure Pursuit run. I also built the training pipeline for a 24-class invasive-plant detector on a DEIMv2 detector with a DINOv3 backbone.",
       approach: [
