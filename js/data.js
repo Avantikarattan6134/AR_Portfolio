@@ -179,7 +179,7 @@ window.PORTFOLIO_DATA = {
         { value: "75k+", label: "Annotated training images (FL + Japan)" }
       ],
       stack: ["YOLO", "SAM2", "DLIO", "GTSAM", "PCL", "DBSCAN", "RANSAC", "ROS2"],
-      links: [{ label: "HRI technical report", href: "#" }]
+      links: []
     },
     {
       id: "lacuum",
