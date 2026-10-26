@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
     { value: "3.978", label: "Graduate GPA / 4.00" },
     { value: "3", label: "Peer-reviewed publications" },
     { value: "8+", label: "Physical robot platforms" },
-    { value: "14", label: "Research & course projects" }
+    { value: "11", label: "Research & industry projects" }
   ],
   education: [
     { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected Dec 2026", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
@@ -178,6 +178,28 @@ window.PORTFOLIO_DATA = {
       ],
       stack: ["YOLO", "SAM2", "DLIO", "GTSAM", "PCL", "DBSCAN", "RANSAC", "ROS2"],
       links: [{ label: "HRI technical report", href: "#" }]
+    },
+    {
+      id: "lacuum",
+      title: "Lacuum AI: Multi-Sensor Perception & Localization for an Autonomous Boat",
+      category: "Industry · Perception + Localization",
+      year: "Summer 2026",
+      badge: "Robotics & Research Engineer Intern",
+      summary: "Built the camera, LiDAR, GNSS and IMU perception and localization pipeline for an autonomous boat operating in unstructured outdoor water, and deployed an invasive-aquatic-plant detector that feeds a ConvBKI semantic map.",
+      media: "Boat platform + semantic map + detector output",
+      overview: "Summer 2026 internship at Lacuum AI, a startup building autonomous boats for waterway maintenance. I owned the perception and localization stack: fusing camera, LiDAR, GNSS and IMU for real-time positioning in unstructured outdoor environments, deploying a detector for invasive aquatic plants, and feeding its detections into a semantic mapping system built on Convolutional Bayesian Kernel Inference (ConvBKI). I also integrated global aerial imagery from the Google Maps API with the platform's local sensor-derived maps.",
+      approach: [
+        "Designed a multi-sensor perception and localization pipeline (camera, LiDAR, GNSS, IMU) for real-time positioning of an autonomous surface vessel in unstructured outdoor water.",
+        "Deployed an invasive-aquatic-plant detector and connected its outputs to a ConvBKI semantic mapping system so detections accumulate into a probabilistic map.",
+        "Integrated global aerial maps from the Google Maps API with the boat's local sensor-derived maps."
+      ],
+      results: [
+        { value: "4", label: "Sensor modalities fused: camera, LiDAR, GNSS, IMU" },
+        { value: "ConvBKI", label: "Semantic mapping of invasive aquatic plants" },
+        { value: "Global + local", label: "Aerial imagery fused with onboard maps" }
+      ],
+      stack: ["ROS2", "LiDAR", "GNSS", "IMU", "Object detection", "ConvBKI", "Google Maps API"],
+      links: []
     },
     {
       id: "impact-aware",
@@ -352,45 +374,6 @@ window.PORTFOLIO_DATA = {
       links: [{ label: "GitHub", href: "https://github.com/Avantikarattan6134/CARLA-PerceptionLab" }]
     },
     {
-      id: "3d-perception",
-      title: "3D Perception: PointNet, NeRF & Gaussian Splatting",
-      category: "Perception",
-      year: "2025–2026",
-      badge: "",
-      summary: "Point-cloud semantic segmentation with PointNet, plus NeRF and 3D Gaussian Splatting for reconstruction and sim-to-real.",
-      media: "Point-cloud segmentation + Gaussian-splat reconstruction",
-      overview: "3D scene understanding across representations: LiDAR point-cloud semantic segmentation and detection, and neural / splat-based reconstruction for sim-to-real transfer.",
-      approach: [
-        "Applied PointNet for LiDAR point-cloud semantic segmentation and 3D object detection using PCL pipelines.",
-        "Implemented NeRF for neural scene reconstruction.",
-        "Implemented 3D Gaussian Splatting for reconstruction and sim-to-real transfer."
-      ],
-      results: [
-        { value: "3", label: "Representations: points, NeRF, 3DGS" }
-      ],
-      stack: ["PointNet", "NeRF", "3D Gaussian Splatting", "PCL"],
-      links: []
-    },
-    {
-      id: "nanobench",
-      title: "NanoBench Drone Dataset: Architecture Comparison",
-      category: "Learning · State Estimation",
-      year: "2025–2026",
-      badge: "",
-      summary: "Compared LN-ResNet vs VN-ResNet for inertial odometry, defining a boundary condition for architecture selection.",
-      media: "Seen vs unseen trajectory error comparison plots",
-      overview: "A controlled comparison of LN-ResNet and VN-ResNet for inertial odometry on a drone dataset, evaluated on both seen and unseen trajectory splits.",
-      approach: [
-        "Compared LN-ResNet and VN-ResNet on seen and unseen trajectory splits.",
-        "Analyzed the role of training-set trajectory exposure on generalization."
-      ],
-      results: [
-        { value: "Boundary", label: "VN-ResNet wins with exposure, loses without" }
-      ],
-      stack: ["PyTorch", "LN-ResNet", "VN-ResNet", "Inertial odometry"],
-      links: []
-    },
-    {
       id: "diff-pf",
       title: "Observation Models for Differentiable Particle Filters",
       category: "State Estimation · Learning",
@@ -420,45 +403,6 @@ window.PORTFOLIO_DATA = {
       ],
       stack: ["TensorFlow 1.15", "Sonnet", "Differentiable PF", "InEKF", "ViT", "ResNet", "Swin", "HPC / Slurm"],
       links: [{ label: "GitHub", href: "https://github.com/Avantikarattan6134/Comparing-Observation-Models-for-Differentiable-Particle-Filters-in-Robot-Localization" }]
-    },
-    {
-      id: "mgo-rrt",
-      title: "MGO-RRT*: Planning with Moss Growth Optimization",
-      category: "Motion Planning",
-      year: "2025–2026",
-      badge: "IEEE report",
-      summary: "Integrated Moss Growth Optimization into RRT* for improved path planning, benchmarked against baseline planners.",
-      media: "Planned paths vs baseline RRT* comparison",
-      overview: "A motion-planning course project embedding Moss Growth Optimization into the RRT* sampling process, with quantitative benchmarking against baseline planners in a full IEEE-format report.",
-      approach: [
-        "Integrated Moss Growth Optimization into RRT* sampling.",
-        "Benchmarked path quality and performance against baseline planners.",
-        "Produced a full IEEE-format technical report."
-      ],
-      results: [
-        { value: "RRT*", label: "Optimizer-enhanced sampling" }
-      ],
-      stack: ["RRT*", "Moss Growth Optimization", "Motion planning"],
-      links: []
-    },
-    {
-      id: "hardware-vit",
-      title: "Hardware Robotics Builds (VIT)",
-      category: "Hardware · Embedded",
-      year: "2023–2024",
-      badge: "",
-      summary: "Built a 4-wheeled autonomous robot and a humanoid biped prototype from scratch: motors, sensors and embedded control.",
-      media: "Assembled robot chassis + biped prototype photos",
-      overview: "Hands-on hardware builds at Vellore Institute of Technology: assembling, wiring and programming autonomous robots from the ground up.",
-      approach: [
-        "Assembled and wired a 4-wheeled autonomous robot: motors, ESP32, ultrasonic sensors and PWM control.",
-        "Built a humanoid biped prototype."
-      ],
-      results: [
-        { value: "2", label: "Robots built from scratch" }
-      ],
-      stack: ["ESP32", "PWM control", "Ultrasonic sensors", "Embedded C"],
-      links: []
     }
   ]
 };
