@@ -126,14 +126,14 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "tartanimu",
-      title: "TartanIMU Challenge: One Equivariant Inertial Model for Four Embodiments",
+      title: "IROS 2026 TartanIMU Challenge: One Equivariant Inertial Model for Four Embodiments",
       category: "Research · Learned Inertial Odometry",
       year: "2026",
-      badge: "Solo entry · Team ENIO",
+      badge: "8th place · IROS 2026 TartanIMU Challenge",
       summary: "A single 5.38 M-parameter SO(3)-equivariant network that predicts body-frame velocity from raw IMU for cars, legged robots, handheld devices and drones with no platform label, scoring 0.2565 against the organisers' 0.538 baseline.",
       media: "Inference pipeline diagram + per-platform results",
       image: "assets/tartanimu-pipeline.png",
-      overview: "A solo entry to the TartanIMU multi-embodiment inertial odometry challenge. The task: predict the mean body-frame velocity of every 1 s window from a raw 6-axis, 200 Hz IMU stream, with one shared set of weights across wheeled, legged, handheld and aerial platforms and no platform label at test time. The backbone is a Lie-neuron-style vector-neuron ResNet, exactly SO(3)-equivariant by construction, paired with a bidirectional LSTM across windows, learned frame adapters, multi-band vibration descriptors and a deterministic turn-kinematics speed gate at inference. The biggest wins were not architectural: a window-offset sampling correction that multiplied the usable training set about 200-fold, a physics-derived speed correction confined to 9 of 89 test trajectories, and replacing a validation split that was statistically uncorrelated with the regime that decides the ranking.",
+      overview: "A solo entry (team ENIO) to the TartanIMU multi-embodiment inertial odometry challenge at IROS 2026, finishing 8th overall on the Kaggle leaderboard. The task: predict the mean body-frame velocity of every 1 s window from a raw 6-axis, 200 Hz IMU stream, with one shared set of weights across wheeled, legged, handheld and aerial platforms and no platform label at test time. The backbone is a Lie-neuron-style vector-neuron ResNet, exactly SO(3)-equivariant by construction, paired with a bidirectional LSTM across windows, learned frame adapters, multi-band vibration descriptors and a deterministic turn-kinematics speed gate at inference. The biggest wins were not architectural: a window-offset sampling correction that multiplied the usable training set about 200-fold, a physics-derived speed correction confined to 9 of 89 test trajectories, and replacing a validation split that was statistically uncorrelated with the regime that decides the ranking.",
       approach: [
         "Backbone: four-stage SO(3)-equivariant vector-neuron ResNet (32/64/96/128 channels, dilated temporal convolutions 1–16) with cross-product Lie-bracket features, invariant scalar gates and invariant attention pooling to one token per 1 s window.",
         "Deliberately non-equivariant additions where the physics demands them: five learned 3×3 frame adapters soft-mixed by invariant weights, a two-layer BiLSTM (hidden 256) across 64-window chunks, and vibration descriptors gated by the network's own aerial probability.",
@@ -143,6 +143,7 @@ window.PORTFOLIO_DATA = {
         "Evaluation discipline: showed validation score and held-out fast-flight error are uncorrelated (r = −0.13), built a leave-one-flight-out protocol that reproduces the test failure on labelled data, and ran about fifty controlled experiments including an 80,640-configuration post-processing sweep that could not beat the shipped setting."
       ],
       results: [
+        { value: "8th", label: "Overall on the IROS 2026 TartanIMU Challenge leaderboard, solo entry" },
         { value: "0.2565", label: "Official score vs the organisers' 0.538 baseline (lower is better)" },
         { value: "0.213 m/s", label: "Macro average velocity error; 0.642 m ATE20 across 89 test trajectories" },
         { value: "≈ 200×", label: "More usable training windows from the sampling correction" },
@@ -150,6 +151,7 @@ window.PORTFOLIO_DATA = {
       ],
       stack: ["PyTorch", "Lie Neurons", "Vector Neurons", "SO(3) equivariance", "BiLSTM", "IMU", "Kaggle"],
       links: [
+        { label: "Kaggle competition", href: "https://www.kaggle.com/competitions/tartan-imu-challenge-iros2026" },
         { label: "Model + code on Hugging Face", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet" },
         { label: "Technical report (PDF)", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet/resolve/main/ENIO_TartanIMU_Report.pdf" }
       ]
