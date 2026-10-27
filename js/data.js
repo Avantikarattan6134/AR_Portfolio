@@ -73,15 +73,6 @@ window.PORTFOLIO_DATA = {
       points: [
         "Built and debugged real robot hardware, designed standardized SOPs, and communicated robotics concepts to diverse audiences."
       ]
-    },
-    {
-      role: "Early Collaborative Research: Project Phoenix (Flash SLAM)",
-      org: "with Kevin Biju Mathew, Purdue IDEAS Lab",
-      when: "",
-      note: "",
-      points: [
-        "Contributed to cross-platform shared 3D mapping across a Clearpath Warthog, Boston Dynamics Spot, and drone platforms."
-      ]
     }
   ],
   skills: [
