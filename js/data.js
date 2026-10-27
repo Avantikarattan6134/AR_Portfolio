@@ -4,7 +4,7 @@ window.PORTFOLIO_DATA = {
     name: "Avantika Rattan",
     role: "M.S. Robotics · University of Michigan",
     blurb: "Robotics and machine-learning researcher working across the full autonomy stack (perception, SLAM, state estimation, equivariant deep learning, planning, and control), from model design through real-time deployment and field validation on physical robot platforms.",
-    seeking: "Seeking research & robotics/AV roles · Graduating May 2027",
+    seeking: "Graduate Student Instructor, ROB 330 · Seeking research & robotics/AV roles · Graduating May 2027",
     email: "arattan@umich.edu",
     phone: "734-255-6901",
     linkedin: "https://linkedin.com/in/avantika-rattan-a837231b9",
@@ -33,6 +33,15 @@ window.PORTFOLIO_DATA = {
         "Co-authored GINIO, an SO(3)-equivariant interface for neural inertial odometry (accepted at CoRL 2026): designed and ran the physical IMU-remount validation on a Fetch robot, cutting unseen-remount ATE from 8.15 m to 0.50 m without retraining.",
         "Deployed a real-time ROS2 inference pipeline across Fetch, Husky and drone platforms with Jetson edge nodes and Tailscale networking.",
         "Stood up an off-road autonomy stack (Phoenix-R2, ARL Warthog) and debugged CycloneDDS domain issues."
+      ]
+    },
+    {
+      role: "Graduate Student Instructor",
+      org: "ROB 330: Localization, Mapping, and Navigation · University of Michigan",
+      when: "Fall 2026",
+      note: "",
+      points: [
+        "Support the MBot lab sequence (particle-filter localization and path planning) and hold weekly office hours for the course."
       ]
     },
     {
