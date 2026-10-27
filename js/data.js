@@ -31,8 +31,7 @@ window.PORTFOLIO_DATA = {
       points: [
         "Shipped a drift-free autonomous maritime perception & localization system (Nautilus ASV, with Honda Research Institute), fusing camera, LiDAR & IMU to detect and localize trailers without drift.",
         "Co-authored GINIO, an SO(3)-equivariant interface for neural inertial odometry (accepted at CoRL 2026): designed and ran the physical IMU-remount validation on a Fetch robot, cutting unseen-remount ATE from 8.15 m to 0.50 m without retraining.",
-        "Deployed a real-time ROS2 inference pipeline across Fetch, Husky and drone platforms with Jetson edge nodes and Tailscale networking.",
-        "Stood up an off-road autonomy stack (Phoenix-R2, ARL Warthog) and debugged CycloneDDS domain issues."
+        "Deployed a real-time ROS2 inference pipeline across Fetch, Husky and drone platforms with Jetson edge nodes and Tailscale networking."
       ]
     },
     {
