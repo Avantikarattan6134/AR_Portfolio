@@ -167,7 +167,7 @@
       <div class="contact-glow"></div>
       <div class="contact-inner">
         <h2>Let's build something<br>that moves.</h2>
-        <p class="contact-sub">Open to research collaborations and robotics / autonomy roles. Graduating December 2026.</p>
+        <p class="contact-sub">Open to research collaborations and robotics / autonomy roles. Graduating May 2027.</p>
         <div class="contact-actions">
           <a href="mailto:${escapeHtml(p.email)}" class="btn-primary">${escapeHtml(p.email)}</a>
           <a href="${escapeHtml(p.linkedin)}" target="_blank" rel="noopener" class="btn-outline">LinkedIn ↗</a>
