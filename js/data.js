@@ -111,7 +111,7 @@ window.PORTFOLIO_DATA = {
       approach: [
         "Mounted an Adafruit BNO055 inside the mobile base of a Fetch robot and used only its raw 6-axis accelerometer and gyroscope channels, with onboard wheel odometry as the reference trajectory.",
         "Designed the protocol: train every model only on the nominal mounting, then physically reinstall the IMU in two unseen 90° orientations (Test Cases 1 and 2) and record 46 remount sequences plus 4 held-out nominal sequences.",
-        "Built the real-time ROS2 inference pipeline with multi-robot YAML configuration, deployed across Fetch, Husky and a drone with Jetson edge nodes.",
+        "Built the real-time ROS2 inference pipeline with robot YAML configuration, deployed across Fetch with Jetson edge nodes.",
         "Evaluated the non-equivariant ResNet against GINIO-R on identical recordings, plus an augmentation ablation showing full SO(3) rotation augmentation only partly rescues the baseline.",
         "Produced the hardware figures and the full-diagnostic appendix plots (trajectory, velocity, ATE) for the paper."
       ],
