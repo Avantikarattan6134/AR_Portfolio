@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
     { value: "3.978", label: "Graduate GPA / 4.00" },
     { value: "3", label: "Peer-reviewed publications" },
     { value: "8+", label: "Physical robot platforms" },
-    { value: "12", label: "Research & industry projects" }
+    { value: "13", label: "Research & industry projects" }
   ],
   education: [
     { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected May 2027", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
@@ -185,6 +185,33 @@ window.PORTFOLIO_DATA = {
         { value: "Fixed", label: "All weights frozen at test time; adaptation comes only from the demonstration clip" }
       ],
       stack: ["PyTorch", "MuJoCo", "World models", "Vision-language-action models", "Ensemble uncertainty", "Diffusion action head", "In-context learning", "Python"],
+      links: []
+    },
+    {
+      id: "for-consistency",
+      title: "Rotate the Answer: Frame-of-Reference Consistency in LLM Spatial Reasoning",
+      category: "Research · NLP + Equivariance",
+      year: "Fall 2026–Present",
+      badge: "In progress · CSE 595",
+      summary: "\"The cat is left of the car\" means something different from the camera's view and from the car's view, and LLMs get it wrong more than half the time. We measure whether their answers transform consistently under rotations of the frame of reference. I own Approach 4: extending the FoREST benchmark to continuous planar and full 3D orientations, with Vector-Neuron and Lie-Neuron spatial heads on frozen LLM features.",
+      media: "C4 orbit of a scene: same cat and car, four target orientations, four answers",
+      image: "assets/for-consistency-c4.png",
+      overview: "Course research project for CSE 595 (Natural Language Processing) at the University of Michigan, in a four-person team with a shared evaluation interface and results table. Spatial language depends on a frame of reference: relative (the camera's left) or intrinsic (the car's left). The FoREST benchmark showed that even GPT-4o with spatially guided chain-of-thought scores only 48.9% and 36.1% on relatum-perspective questions in two of its settings. Our angle is transformation consistency: quarter-turns of the target frame form the cyclic group C4 acting as permutations of {left, right, front, back}, so for every scene we can state exactly how the answer should change when the frame turns. The project asks which transformations model predictions respect, how much error comes from scene extraction versus coordinate conversion, whether a consistency loss improves generalisation beyond rotation augmentation, and whether equivariant spatial heads on frozen LLM features can do the conversion in continuous 2D and 3D. My approach is the last of these.",
+      approach: [
+        "Approach 4 (mine), FoREST-C: extend FoREST with a textual world-frame bearing β and target orientation θ, so the answer becomes a continuous angle α = (β − θ) mod 360° in the plane rather than one of four words; stage two uses complete orientations R in SO(3) with yaw, pitch and roll, v_target = Rᵀ v.",
+        "Spatial heads on frozen LLM features: projected Vector-Neuron heads (restricted to planar rotations, or used in 3D) against Lie-Neuron heads on so(3), to test whether the extra algebraic structure helps. Baselines are a capacity-matched MLP, the exact symbolic converter from Approach 2, and the consistency-regularised LoRA model from Approach 3 adapted with a squared-error loss on transformed unit vectors.",
+        "An equivariant head does not make an equivariant pipeline, so projected-feature consistency and output consistency are measured separately. Metrics: circular error in 2D, vector angular error in 3D, nearest-axis accuracy (4 planar / 6 3D labels) with fixed tie rules, and continuous equivariance measured before binning.",
+        "Generalisation tests hold out objects, angle combinations and whole angular intervals, and separate parsing failures from conversion errors; planar and 3D labels are validated against analytic converters.",
+        "Team context, Approaches 1 to 3: validated C4 orbits with an equivariance-error metric and layer-wise linear probes; an extract-then-convert decomposition with prompting baselines (zero-shot, few-shot, CoT, SG+CoT) across Llama-3.1-8B, Qwen2.5-7B, Qwen3-8B, Gemma-3-12B and Gemini; and LoRA fine-tuning of 7–8B models with a Jensen-Shannon consistency loss between p(g·x) and the permuted p(x), compared with plain and rotation-augmented fine-tuning at matched budgets.",
+        "Data: FoREST's MIT-licensed generator (4,288 A-split and 9,112 / 8,384 C-split camera and relatum questions), with our scorer validated against the published GPT-4o numbers before any new variants are scored. Compute on the Great Lakes cluster."
+      ],
+      results: [
+        { value: "In progress", label: "Proposal Nov 2026; planar and 3D generator validation, then head comparisons; final report and code release mid-December" },
+        { value: "α = (β − θ)", label: "Continuous planar target, then full SO(3) orientations, replacing the four-word answer" },
+        { value: "VN vs LN", label: "Vector-Neuron and Lie-Neuron heads against a capacity-matched MLP on frozen LLM features" },
+        { value: "48.9%", label: "GPT-4o SG+CoT accuracy on FoREST relatum-perspective questions, the gap this project targets" }
+      ],
+      stack: ["PyTorch", "Hugging Face Transformers", "LoRA", "Vector Neurons", "Lie Neurons", "SO(2) / SO(3) equivariance", "FoREST", "Llama 3.1 / Qwen / Gemma", "Python"],
       links: []
     },
     {
