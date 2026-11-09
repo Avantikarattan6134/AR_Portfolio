@@ -37,7 +37,7 @@ window.PORTFOLIO_DATA = {
     {
       role: "Graduate Student Instructor",
       org: "ROB 330: Localization, Mapping, and Navigation · University of Michigan",
-      when: "Fall 2026",
+      when: "Aug 2026 to Dec 2026",
       note: "",
       points: [
         "Support the MBot lab sequence (particle-filter localization and path planning) and hold weekly office hours for the course."
