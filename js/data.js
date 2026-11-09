@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
     { value: "3.978", label: "Graduate GPA / 4.00" },
     { value: "3", label: "Peer-reviewed publications" },
     { value: "8+", label: "Physical robot platforms" },
-    { value: "11", label: "Research & industry projects" }
+    { value: "12", label: "Research & industry projects" }
   ],
   education: [
     { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected May 2027", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
@@ -155,6 +155,37 @@ window.PORTFOLIO_DATA = {
         { label: "Model + code on Hugging Face", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet" },
         { label: "Technical report (PDF)", href: "https://huggingface.co/arattan7272/tartanimu-lnresnet/resolve/main/ENIO_TartanIMU_Report.pdf" }
       ]
+    },
+    {
+      id: "world-model-tools",
+      title: "In-Context Causal Tool Learning: a Context-Conditioned World Model for Robot Tool Use",
+      category: "Research · World Models + VLA",
+      year: "Fall 2026–Present",
+      badge: "In progress",
+      summary: "Can a robot watch one 2–4 s clip of an unfamiliar tool being used and predict how that tool will behave on a different task, or decide it is better off with another tool or no tool at all? I own the world model: an ensemble of object-centric dynamics predictors conditioned on a learned tool context, which scores VLA-proposed plans before the robot commits to one.",
+      media: "Inference architecture: demo encoder, VLA proposer, ensemble world model, plan scorer",
+      image: "assets/worldmodel-ensemble.png",
+      gallery: [
+        { src: "assets/worldmodel-architecture.png", caption: "Proposed inference architecture. A support demonstration per tool is encoded into a cached context; the VLA proposes joint-space plans including direct manipulation; the ensemble world model predicts outcomes conditioned on scene and tool context; a goal-conditioned scorer picks a plan and the controller executes a short chunk before replanning." }
+      ],
+      overview: "A three-person research project in the University of Michigan Robotics program with Ashrith Edukulla and Siddhant Bohra. Two trays can look identical but behave completely differently: one heavy and grippy, the other light and slippery. Appearance cannot tell them apart, but watching something slide across one can. So instead of guessing from pixels, the robot gets one short demonstration of each candidate tool, compresses it into a 128-dimensional tool context, and uses a context-conditioned world model to imagine what each candidate plan would do. A vision-language-action (VLA) model proposes 12 joint-space plans per tool plus 12 no-tool plans, the world model rolls each one forward, and a planner scores predicted goal progress, execution cost and uncertainty, then executes 0.25–0.5 s before replanning. No weights are fine-tuned at test time; all adaptation comes from the demonstration. My part is the world model itself: the shared input fusion, the dynamics members, the ensemble-disagreement uncertainty estimate and the multi-step training curriculum. The project is at the proposal and skeleton stage; the pilot (640 rollouts on eight procedurally generated trays, two friction profiles) is the next milestone.",
+      approach: [
+        "Tool context goes into the world model, not the VLA. That keeps the candidate plans identical when the context is swapped, so any change in behaviour is attributable to what the model predicts rather than to different proposals.",
+        "World model (my component): three independently initialised object-centric predictors, each receiving the same scene estimate, joint state, tool, action chunk and context, predicting object motion, contact/slip events and success over a 1–2 s horizon. Ensemble disagreement on predicted final positions is the uncertainty signal.",
+        "Design plan for the dynamics: a flat MLP member first, then an object-centric transformer, as two switches on one codebase; the replanning chunk is the dynamics step, with an 8-step horizon trained through a 1/2/4/8-step curriculum. Rollout-based ranking and a direct candidate scorer are both implemented so the central ablation is a config flag.",
+        "Training objective: normalised position and velocity error, geodesic rotation error, contact/slip cross-entropy, multistep prediction error, success BCE, and a branch-ranking loss that orders plans by observed utility from the same initial state. Free-running rollouts are evaluated alongside teacher-forced predictions.",
+        "Simulation: MuJoCo, 7-DoF arm with parallel gripper, three task families (push/reach, hook/pull, lift/carry). Procedural hooks, paddles and trays, each geometry crossed with low/high mass × low/high friction, appearance randomised independently so looks cannot leak physics. Planned dataset: 440 geometries, 320/40/80 split, 25.6k/3.2k/6.4k rollouts.",
+        "The test that matters: reset the same scene, run identical commands under different hidden physical profiles, and check whether predictions shift the right way given the correct, absent, opposite or irrelevant demonstration. Ambiguous demonstrations should raise uncertainty, not confidence.",
+        "Baselines: direct VLA execution, a no-context world model, a final-frame context model, a direct scorer without rollouts, a demo-conditioned policy, a geometry/language-only model, an explicit property estimator, and a simulator oracle as the candidate-limited upper bound."
+      ],
+      results: [
+        { value: "Proposal", label: "Written; code skeleton, configs and tests in place; pilot of 640 rollouts is the next milestone" },
+        { value: "3 × 10–30 M", label: "Planned ensemble of object-centric dynamics predictors, parameters per member" },
+        { value: "48", label: "Candidate plans scored per replanning step: 12 per tool × 3 tools + 12 no-tool" },
+        { value: "Fixed", label: "All weights frozen at test time; adaptation comes only from the demonstration clip" }
+      ],
+      stack: ["PyTorch", "MuJoCo", "World models", "Vision-language-action models", "Ensemble uncertainty", "Diffusion action head", "In-context learning", "Python"],
+      links: []
     },
     {
       id: "nautilus",
