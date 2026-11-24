@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
     { value: "3.978", label: "Graduate GPA / 4.00" },
     { value: "3", label: "Peer-reviewed publications" },
     { value: "8+", label: "Physical robot platforms" },
-    { value: "13", label: "Research & industry projects" }
+    { value: "14", label: "Research & industry projects" }
   ],
   education: [
     { degree: "M.S. Robotics", school: "University of Michigan, Ann Arbor", when: "Expected May 2027", detail: "GPA 3.978 / 4.00 · Mobile Robotics, Robot Perception, ML for Robotics, Robotic Systems Lab, Self-Driving Cars, Control Systems, Embedded Robotics" },
@@ -213,6 +213,42 @@ window.PORTFOLIO_DATA = {
       ],
       stack: ["PyTorch", "Hugging Face Transformers", "LoRA", "Vector Neurons", "Lie Neurons", "SO(2) / SO(3) equivariance", "FoREST", "Llama 3.1 / Qwen / Gemma", "Python"],
       links: []
+    },
+    {
+      id: "beyond-words",
+      title: "Beyond Words: an SSVEP Brain-Computer Interface for People Who Cannot Speak",
+      category: "Hackathon · Brain-Computer Interface",
+      year: "Nov 2026",
+      badge: "3rd place · Base44 track · Hack The Nest 2026",
+      summary: "A 24-hour hackathon build: four boxes flicker at different frequencies, an 8-channel EEG headset over the visual cortex reads which one the person is looking at, a voice speaks the need aloud in their language, and the caregiver's phone and a Base44 web app are alerted. 99% decoding accuracy on recorded EEG from 35 people, no per-person training.",
+      media: "Patient mode on the demo laptop + postcard + electrode montage",
+      image: "assets/beyondwords-patient-mode.jpg",
+      gallery: [
+        { src: "assets/beyondwords-postcard.jpg", caption: "Postcard mode: a message spelled by gaze alone, drawn over the person's own EEG trace" },
+        { src: "assets/beyondwords-montage.png", caption: "The eight occipital and parietal electrodes the decoder uses (PO7, PO3, POz, PO4, PO8, O1, Oz, O2)" },
+        { src: "assets/beyondwords-logo.jpg", caption: "Team logo. Hack The Nest 2026, four-person team" }
+      ],
+      overview: "Built in one weekend at Hack The Nest 2026 by a four-person team, Beyond Words (BrainType) is a steady-state visual evoked potential (SSVEP) speller. Each of four on-screen boxes flickers at its own frequency (9, 10, 12 and 15 Hz); when a person fixates on one, their visual cortex echoes that frequency, and eight EEG electrodes at the back of the head pick it up. A filter-bank canonical correlation analysis decoder compares a 3-second window of EEG with each frequency and selects the box only when one clearly stands out. Patient mode turns a single look into a spoken sentence (WATER, PAIN, EMERGENCY, COME HERE and more) in any of eleven languages, rings a bell and pushes an alert to a caregiver's phone, and logs the message to a Base44 caregiver web app where family can reply from anywhere. Postcard mode lets a visitor spell a short message by gaze with word prediction, and renders it over generative art made from their own brainwaves. The Base44 caregiver app won third place in the Best Use of Base44 track. Everything runs on a laptop and a consumer EEG headset.",
+      approach: [
+        "Decoder: band-pass 5–40 Hz and 60 Hz notch, 3 s sliding window every 0.25 s, filter-bank CCA against sine/cosine references at each frequency and its first three harmonics, then a selector that fires only when the top score beats the runner-up by a margin for three consecutive decisions, followed by a 1 s lockout. Artifact windows above 100 µV are skipped.",
+        "No per-person calibration. Settings were chosen by a grid search over window length (1 to 3 s), plain CCA versus filter-bank CCA and electrode subsets, run on two public datasets (the 35-person Tsinghua SSVEP benchmark and g.tec's 2-person recordings); we chose the 3 s window for accuracy over information-transfer rate because a patient cannot easily undo a wrong pick.",
+        "Stimuli are frame-indexed sampled sinusoidal luminance, so any frequency renders correctly on a 60 Hz display; flicker contrast is reduced, boxes flicker only while a choice is open, and one key pauses everything, with a photosensitivity warning before anyone sits down.",
+        "Patient mode: a three-page needs menu (WATER, PAIN, EMERGENCY, MORE; COME HERE, BODY, TALK; SPELL, REST, MY PHRASES). EMERGENCY sounds a siren that only a helper can cancel, PAIN asks where it hurts, REST blanks the screen and needs two looks at different corners to wake, and a two-box easy mode exists for weak signals.",
+        "Word prediction from a 60,251-word corpus built from real augmentative-and-alternative-communication text, with optional Gemini next-word suggestions; on held-out AAC sentences it saves 57.8% of looks when spelling. ElevenLabs text-to-speech with a cached offline fallback, so WATER still speaks with the Wi-Fi down.",
+        "Caregiver side: ntfy push alerts to a phone and a Base44 web app that shows the message feed, lets family reply, and speaks the reply through the speller. Privacy by design: raw EEG never leaves the laptop, the app only receives decoded messages, and postcards are posted only with consent.",
+        "Architecture: EEG source (live g.tec Unicorn via Lab Streaming Layer, or replayed human recordings), a classifier node, and the pygame speller UI, talking over local UDP so any part can be swapped; one launcher starts and stops all three. A live PiEEG Octopus-16 dry-electrode headset was also brought up over Bluetooth."
+      ],
+      results: [
+        { value: "99.0%", label: "Decoding accuracy on the 35-person Tsinghua benchmark (recorded EEG, 3 s windows, 4 targets, chance 25%); 34 of 35 people above 90%" },
+        { value: "≈ 2.7 s", label: "Per selection in a live replay run, 32 of 32 picks correct; about one false pick per minute on resting EEG" },
+        { value: "57.8%", label: "Looks saved by word prediction on held-out communication-aid sentences" },
+        { value: "3rd place", label: "Best Use of Base44 track, Hack The Nest 2026, for the caregiver web app" }
+      ],
+      stack: ["Python", "NumPy / SciPy", "Filter-bank CCA", "Lab Streaming Layer", "pygame", "g.tec Unicorn EEG", "PiEEG Octopus-16", "Base44", "ElevenLabs", "Gemini API", "ntfy"],
+      links: [
+        { label: "Caregiver app (Base44)", href: "https://gaze-link-care.base44.app" },
+        { label: "GitHub (team repo)", href: "https://github.com/jimmunene/beyond-words" }
+      ]
     },
     {
       id: "nautilus",
