@@ -75,14 +75,15 @@ window.PORTFOLIO_DATA = {
     }
   ],
   skills: [
-    { group: "Perception & Computer Vision", items: ["PyTorch", "TensorFlow", "CNNs", "ResNet / LN-ResNet / VN-ResNet", "ViT", "YOLO11 / v8", "U-Net", "BEVUNet", "PointNet", "NeRF", "3D Gaussian Splatting", "OpenCV"] },
-    { group: "State Estimation & SLAM", items: ["EKF / UKF", "RI-EKF on SE2(3)", "Particle filters", "GTSAM factor graphs", "DLIO", "SLAM Toolbox", "AMCL", "Monocular VO", "Flash SLAM"] },
-    { group: "Sensor Fusion & Calibration", items: ["LiDAR / Camera / IMU / GPS fusion", "Intrinsic & extrinsic calibration", "Time synchronization", "PCL", "DBSCAN", "RANSAC", "AprilTag", "PnP", "Homography"] },
-    { group: "Planning & Control", items: ["A*", "RRT*", "MGO-RRT*", "NMPC", "LQR", "PID", "Trajectory generation"] },
-    { group: "RL & Imitation Learning", items: ["PPO (GAE, reward shaping)", "DQN", "Imitation learning", "Behavior cloning analysis", "Diffusion policy"] },
-    { group: "Programming & Systems", items: ["Python", "C++", "MATLAB", "ROS2", "Git", "Docker", "CMake", "Linux", "HPC / Slurm", "Jetson", "ESP32 / Raspberry Pi"] },
-    { group: "Simulation", items: ["CARLA", "Gazebo", "ARL / Phoenix-R2"] },
-    { group: "Mathematics", items: ["Linear algebra", "Probability & statistics", "SE(3) / SO(3) / SE2(3) Lie theory", "Bayesian inference", "Numerical optimization", "Camera models"] }
+    { group: "Equivariant & Geometric Deep Learning", items: ["Lie Neurons", "Vector Neurons", "SO(3) / SE(3) equivariance", "LN-ResNet / VN-ResNet", "SE(3) / SO(3) / SE₂(3) Lie theory", "Invariant filtering", "Ensemble uncertainty"] },
+    { group: "State Estimation & SLAM", items: ["EKF / UKF", "Invariant EKF on SE₂(3)", "Particle filters & differentiable PFs", "Learned inertial odometry", "GTSAM factor graphs", "Occupancy-grid SLAM", "Monte Carlo localization", "DLIO", "SLAM Toolbox", "AMCL", "Monocular VO / VIO"] },
+    { group: "Perception & Computer Vision", items: ["PyTorch", "TensorFlow", "CNNs / ResNet", "ViT / Swin", "YOLO11 / v8", "DEIMv2 + DINOv3", "SAM2-assisted annotation", "U-Net / BEVUNet", "PointNet", "OpenCV", "Camera calibration"] },
+    { group: "Sensor Fusion & Mapping", items: ["LiDAR / Camera / IMU / GPS fusion", "Intrinsic & extrinsic calibration", "Time synchronization", "ConvBKI neural occupancy mapping", "Satellite + OpenStreetMap prior maps", "PCL", "DBSCAN", "RANSAC", "AprilTag", "PnP", "Homography"] },
+    { group: "Planning & Control", items: ["A*", "RRT*", "Boustrophedon coverage planning", "Frontier exploration", "Pure Pursuit", "PID", "LQR", "Trajectory generation", "DH kinematics & IK"] },
+    { group: "Learning for Robots & Language", items: ["World models", "Vision-language-action models", "PPO (GAE, reward shaping)", "DQN", "Imitation learning", "Diffusion policy", "LLM fine-tuning (LoRA)", "Hugging Face Transformers", "In-context learning", "Gemini / ElevenLabs APIs"] },
+    { group: "Programming & Systems", items: ["Python", "C++", "MATLAB", "Bash", "ROS 2 (Humble / Jazzy)", "Git", "Docker", "CMake", "Linux", "HPC / Slurm", "NVIDIA Jetson Orin", "ESP32 / Raspberry Pi", "Lab Streaming Layer", "pygame"] },
+    { group: "Simulation & Hardware", items: ["CARLA", "Gazebo / VRX", "MuJoCo", "Fetch", "Husky UGV", "MBot", "Interbotix RX200", "WAM-V-style ASV", "RealSense", "Robosense LiDAR", "VectorNav IMU", "Septentrio GNSS", "g.tec Unicorn / PiEEG EEG"] },
+    { group: "Signal Processing & Mathematics", items: ["Linear algebra", "Probability & statistics", "Bayesian inference", "Numerical optimization", "Camera models", "EEG / SSVEP decoding (filter-bank CCA)", "Spectral analysis"] }
   ],
   publications: [
     { title: "GINIO: A Geometric SO(3)-Equivariant Interface for Neural Inertial Odometry", venue: "Conference on Robot Learning (CoRL) 2026", status: "Accepted", authors: "Kim, C., Zhu, M., Lin, T.-Y., Rattan, A., Ghaffari, M.", doi: "", url: "https://arxiv.org/abs/2609.25338" },
